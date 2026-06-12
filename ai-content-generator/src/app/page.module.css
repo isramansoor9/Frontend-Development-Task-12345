@@ -429,13 +429,18 @@
   max-height: calc(100dvh - 320px);
 }
 
-/* ── Board bottom ── */
+/* ── Board bottom — desktop & phone ── */
 .boardBottom {
   display: flex;
   align-items: flex-start;
   gap: 14px;
   padding: 4px 18px 16px;
   flex-wrap: wrap;
+}
+
+/* iPad-only history (inside rightCol, hidden by default) */
+.historyPanelIpad {
+  display: none;
 }
 
 /* History box */
@@ -587,4 +592,72 @@
   .boardMain  { gap: 8px; padding: 0 8px 8px; }
   .leftCol    { grid-template-columns: 1fr; }
   .centerPaper { padding: 22px 14px 16px; }
+}
+
+/* iPad only (768px–1194px) — history on left, 4 small thumbs per row */
+@media (min-width: 768px) and (max-width: 1194px) {
+  .boardMain {
+    flex: 0 0 auto;
+    grid-template-columns: 284px 1fr minmax(130px, 0.9fr);
+    grid-template-rows: auto;
+    align-items: start;
+  }
+
+  /* Override mobile rules that span leftCol full-width */
+  .leftCol {
+    display: flex !important;
+    flex-direction: column;
+    grid-column: 1;
+    grid-row: 1;
+    grid-template-columns: unset;
+  }
+
+  .centerCol {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .rightCol {
+    grid-column: 3;
+    grid-row: 1;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .boardBottom {
+    display: none;
+  }
+
+  .historyPanelIpad {
+    display: block;
+    margin-top: 4px;
+  }
+
+  .historyPanelIpad .historyBox {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .historyPanelIpad .historyGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 68px);
+    grid-auto-flow: row;
+    gap: 4px;
+    justify-content: start;
+    width: 100%;
+  }
+
+  .historyPanelIpad .historyThumb {
+    width: 68px;
+  }
+
+  .historyPanelIpad .historyPolaroid {
+    padding: 2px 2px 4px;
+    width: 68px;
+  }
+
+  .historyPanelIpad .historyThumbImg {
+    width: 64px;
+    height: 64px;
+  }
 }

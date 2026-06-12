@@ -48,6 +48,40 @@ function Pin({ color = "red", style: extraStyle }) {
   return <span className={`${styles.pin} ${cls}`} style={extraStyle} aria-hidden="true" />;
 }
 
+/* ── History box ───────────────────────────────────── */
+function HistoryBox({ onImageClick }) {
+  return (
+    <div className={styles.historyBox}>
+      <div className={styles.historyBoxTop}>
+        <Pin />
+        <span className={styles.historyLabel}>History</span>
+        <button className={styles.historyViewAll} type="button">View all</button>
+      </div>
+      <div className={`${styles.historyGrid} scrollbar-hidden`}>
+        {HISTORY_ITEMS.slice(0, 10).map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={styles.historyThumb}
+            onClick={() => onImageClick({ src: item.src, alt: item.alt })}
+            aria-label={item.alt}
+          >
+            <div className={styles.historyPolaroid}>
+              <Image
+                src={item.src}
+                alt={item.alt}
+                width={50}
+                height={50}
+                className={styles.historyThumbImg}
+              />
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Main page ─────────────────────────────────────── */
 export default function HomePage() {
   const { theme, toggleTheme } = useTheme();
@@ -315,6 +349,11 @@ export default function HomePage() {
                     </div>
                   )}
                 </div>
+
+                {/* iPad only — history beneath controls */}
+                <div className={styles.historyPanelIpad}>
+                  <HistoryBox onImageClick={openLightbox} />
+                </div>
               </aside>
 
               {/* ── CENTER: Prompt paper ── */}
@@ -376,39 +415,9 @@ export default function HomePage() {
               </section>
             </div>
 
-            {/* == BOARD BOTTOM == */}
+            {/* == BOARD BOTTOM — desktop & phone == */}
             <footer className={styles.boardBottom}>
-
-              {/* History box */}
-              <div className={styles.historyBox}>
-                <div className={styles.historyBoxTop}>
-                  <Pin />
-                  <span className={styles.historyLabel}>History</span>
-                  <button className={styles.historyViewAll} type="button">View all</button>
-                </div>
-                <div className={`${styles.historyGrid} scrollbar-hidden`}>
-                  {HISTORY_ITEMS.slice(0, 10).map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className={styles.historyThumb}
-                      onClick={() => openLightbox({ src: item.src, alt: item.alt })}
-                      aria-label={item.alt}
-                    >
-                      <div className={styles.historyPolaroid}>
-                        <Image
-                          src={item.src}
-                          alt={item.alt}
-                          width={50}
-                          height={50}
-                          className={styles.historyThumbImg}
-                        />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
+              <HistoryBox onImageClick={openLightbox} />
             </footer>
 
           </div>{/* /cork */}

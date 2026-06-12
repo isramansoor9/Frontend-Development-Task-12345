@@ -161,3 +161,29 @@
     gap: 10px;
   }
 }
+
+/* iPad (768px–1194px) — smaller polaroids in narrow right column */
+@media (min-width: 768px) and (max-width: 1194px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(68px, 1fr));
+    gap: 8px;
+    padding: 4px 0 6px;
+  }
+
+  .polaroid {
+    padding: 3px 3px 0;
+  }
+
+  .polaroidBottom {
+    padding: 3px 2px 5px;
+  }
+
+  .caption {
+    font-size: 0.5rem;
+    height: 11px;
+  }
+
+  .overlayIcon {
+    font-size: 1.1rem;
+  }
+}
