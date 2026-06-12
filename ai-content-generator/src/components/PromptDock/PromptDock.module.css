@@ -111,14 +111,14 @@
 
 @media (max-width: 900px) {
   .dock {
-    left: 60px;
+    left: 0;
     right: 0;
+    padding: 0 14px 14px;
   }
 }
 
 @media (max-width: 600px) {
   .dock {
-    left: 0;
     padding: 0 12px 12px;
   }
 

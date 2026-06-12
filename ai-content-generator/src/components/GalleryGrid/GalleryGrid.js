@@ -1,115 +1,101 @@
+import { memo, useCallback } from "react";
 import Image from "next/image";
-import PromptCard from "@/components/PromptCard/PromptCard";
 import styles from "./GalleryGrid.module.css";
 
-function SkeletonCard({ className = "" }) {
+/* Rotation values that feel hand-placed */
+const ROTS = [-3, 1.5, -2, 2.8, -1.2, 3.2, -2.5, 1.8, -0.8, 2.2, -3.5, 1.0];
+
+/* ── Skeleton loading polaroid ── */
+function PolaroidSkeleton({ index }) {
   return (
-    <div className={`${styles.card} ${styles.skeleton} ${className}`}>
-      <div className={`${styles.skeletonFill} skeleton-pulse`} />
+    <div
+      className={styles.polaroid}
+      style={{ "--rot": `${ROTS[index % ROTS.length]}deg`, "--delay": `${index * 0.08}s` }}
+      aria-hidden="true"
+    >
+      <div className={`${styles.photoWrap} skeleton-pulse`} />
+      <div className={styles.polaroidBottom}>
+        <div className={`${styles.captionSkel} skeleton-pulse`} />
+      </div>
     </div>
   );
 }
 
-function MediaCard({ item, onClick }) {
-  if (item.type === "video") {
-    return (
-      <article className={styles.card}>
-        <video
-          className={styles.media}
-          src={item.src}
-          poster={item.poster}
-          controls
-          preload="metadata"
-          aria-label={item.alt}
-        >
-          <track kind="captions" />
-        </video>
-      </article>
-    );
-  }
+/* ── Single polaroid card ── */
+const PolaroidCard = memo(function PolaroidCard({ item, index, onClick }) {
+  const handleClick = useCallback(() => onClick?.({ src: item.src, alt: item.alt }), [item, onClick]);
 
   return (
     <article
-      className={`${styles.card} ${onClick ? styles.cardClickable : ""}`}
-      onClick={onClick ? () => onClick({ src: item.src, alt: item.alt }) : undefined}
-      role={onClick ? "button" : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === "Enter" || e.key === " ")
-                onClick({ src: item.src, alt: item.alt });
-            }
-          : undefined
-      }
-      aria-label={onClick ? `View ${item.alt} full size` : undefined}
+      className={styles.polaroid}
+      style={{ "--rot": `${ROTS[index % ROTS.length]}deg`, "--delay": `${index * 0.07}s` }}
     >
-      <Image
-        src={item.src}
-        alt={item.alt}
-        fill
-        className={styles.image}
-        sizes="(max-width: 640px) 50vw, (max-width: 1200px) 33vw, 25vw"
-        style={{ objectFit: "cover" }}
-      />
-      <div className={styles.hoverOverlay} aria-hidden="true">
-        <div className={styles.hoverBadge}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          View
+      <button
+        type="button"
+        className={styles.photoBtn}
+        onClick={handleClick}
+        aria-label={`Open full view: ${item.alt}`}
+      >
+        <div className={styles.photoWrap}>
+          <Image
+            src={item.src}
+            alt={item.alt}
+            fill
+            className={styles.photo}
+            sizes="(max-width: 640px) 42vw, (max-width: 900px) 28vw, 18vw"
+            loading={index < 4 ? "eager" : "lazy"}
+          />
+          {/* Hover overlay */}
+          <div className={styles.overlay} aria-hidden="true">
+            <span className={styles.overlayIcon}>⊕</span>
+          </div>
         </div>
-      </div>
+        <div className={styles.polaroidBottom}>
+          <p className={styles.caption}>
+            {item.alt ? item.alt.slice(0, 28) : "untitled"}
+          </p>
+        </div>
+      </button>
     </article>
   );
-}
+});
 
+/* ── Gallery grid ── */
 export default function GalleryGrid({
-  prompt,
-  items,
-  isGenerating,
-  expectedCount,
+  items = [],
+  isGenerating = false,
+  expectedCount = 8,
   onImageClick,
-  onPromptCardClick,
 }) {
   if (isGenerating) {
     return (
-      <section className={styles.section} aria-label="Generating" aria-live="polite" aria-busy="true">
-        <PromptCard prompt={prompt} onClick={onPromptCardClick} />
-        <div className={styles.grid}>
-          {Array.from({ length: expectedCount }, (_, i) => (
-            <SkeletonCard
-              key={i}
-              className={
-                i === 0 ? styles.cellSpan2 :
-                i === 3 ? styles.cellTall :
-                i === 5 ? styles.cellSpan2 : ""
-              }
-            />
-          ))}
-        </div>
-      </section>
+      <div className={styles.grid} aria-label="Generating images" aria-busy="true" aria-live="polite">
+        {Array.from({ length: expectedCount }, (_, i) => (
+          <PolaroidSkeleton key={`skel-${i}`} index={i} />
+        ))}
+      </div>
+    );
+  }
+
+  if (!items.length) {
+    return (
+      <div className={styles.empty} aria-label="No images yet">
+        <span className={styles.emptyIcon}>📸</span>
+        <p className={styles.emptyText}>Your images appear here</p>
+      </div>
     );
   }
 
   return (
-    <section className={styles.section} aria-label="Generated results" aria-live="polite">
-      <PromptCard prompt={prompt} onClick={onPromptCardClick} />
-      <div className={styles.grid}>
-        {items.map((item, i) => (
-          <div
-            key={item.id}
-            className={`${styles.cell} ${
-              i === 0 ? styles.cellSpan2 :
-              i === 3 ? styles.cellTall :
-              i === 5 ? styles.cellSpan2 : ""
-            }`}
-            style={{ animationDelay: `${i * 55}ms` }}
-          >
-            <MediaCard item={item} onClick={onImageClick} />
-          </div>
-        ))}
-      </div>
-    </section>
+    <div className={styles.grid} aria-label="Generated images">
+      {items.map((item, i) => (
+        <PolaroidCard
+          key={item.id}
+          item={item}
+          index={i}
+          onClick={onImageClick}
+        />
+      ))}
+    </div>
   );
 }

@@ -1,21 +1,18 @@
 .card {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 0.5rem;
-  width: 100%;
-  margin-bottom: 14px;
-  padding: 14px 16px 12px 18px;
-  border: 1px solid var(--color-border-strong);
+  justify-content: space-between;
+  flex-shrink: 0;
+  width: 220px;
+  min-height: 420px;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--color-border);
   border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    var(--color-purple-softer) 0%,
-    var(--color-surface-2) 55%,
-    var(--color-surface) 100%
-  );
-  box-shadow: var(--shadow-md);
-  transition: background-color 0.25s, border-color 0.25s, box-shadow 0.25s;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
 }
 
 .clickable {
@@ -23,14 +20,14 @@
 }
 
 .clickable:hover {
-  border-color: var(--color-purple);
-  box-shadow: var(--shadow-lg);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
 }
 
 .text {
   margin: 0;
   font-size: 0.8rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--color-text-muted);
   white-space: pre-wrap;
   word-break: break-word;
@@ -39,14 +36,20 @@
 .modelBadge {
   align-self: flex-end;
   flex-shrink: 0;
-  margin-top: 4px;
+  margin-top: 12px;
   padding: 5px 12px;
   border-radius: 8px;
-  background: var(--color-surface);
+  background: var(--color-surface-2);
   border: 1px solid var(--color-border);
-  font-family: var(--font-space-grotesk), sans-serif;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text);
   box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 900px) {
+  .card {
+    width: 100%;
+    min-height: auto;
+  }
 }

@@ -16,6 +16,7 @@ import {
   SunIcon,
   HistoryIcon,
   ImageIcon,
+  CloseIcon,
 } from "@/components/icons/Icons";
 import {
   HISTORY_ITEMS,
@@ -37,6 +38,8 @@ const NAV_ITEMS = [
 ];
 
 export default function Sidebar({
+  isOpen = false,
+  onClose,
   onHistoryImageClick,
   contentType,
   onContentTypeChange,
@@ -90,8 +93,26 @@ export default function Sidebar({
     };
   }, [endDrag, handleMouseMove]);
 
+  const closeIfMobile = () => {
+    if (typeof window !== "undefined" && window.innerWidth <= 900) {
+      onClose?.();
+    }
+  };
+
   return (
-    <aside className={styles.sidebar}>
+    <>
+      {isOpen && (
+        <div
+          className={styles.backdrop}
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+
+      <aside
+        className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ""}`}
+        aria-label="Sidebar navigation and controls"
+      >
       <div className={styles.logoSection}>
         <Image
           src={logoImage}
@@ -101,6 +122,14 @@ export default function Sidebar({
           className={styles.logoImage}
           priority
         />
+        <button
+          type="button"
+          className={styles.closeBtn}
+          onClick={onClose}
+          aria-label="Close menu"
+        >
+          <CloseIcon className={styles.closeIcon} />
+        </button>
       </div>
 
       <nav className={styles.nav} aria-label="Main navigation">
@@ -111,7 +140,10 @@ export default function Sidebar({
                 type="button"
                 className={`${styles.navItem} ${activeId === id ? styles.navItemActive : ""}`}
                 aria-current={activeId === id ? "page" : undefined}
-                onClick={() => setActiveId(id)}
+                onClick={() => {
+                  setActiveId(id);
+                  closeIfMobile();
+                }}
               >
                 <span className={styles.navIconWrap}>
                   <Icon className={styles.navIcon} />
@@ -290,5 +322,6 @@ export default function Sidebar({
         </button>
       </div>
     </aside>
+    </>
   );
 }
