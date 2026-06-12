@@ -1,0 +1,123 @@
+.root {
+  border-radius: 0.55rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.55rem 1.65rem 0.55rem 0.65rem;
+  background: var(--color-surface);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: background-color 0.2s ease;
+}
+
+.trigger:hover {
+  background: var(--color-surface-hover);
+}
+
+.title {
+  text-align: center;
+}
+
+.chevronButton {
+  position: absolute;
+  right: 0.55rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 0.35rem;
+  background: var(--color-surface-2);
+}
+
+.chevron {
+  width: 0.8rem;
+  height: 0.8rem;
+  color: var(--color-text-muted);
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.panel {
+  padding: 0 0.65rem 0.65rem;
+}
+
+.panelOpen {
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.optionButton {
+  padding: 0.5rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.55rem;
+  background: var(--color-surface-2);
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  transition: all 0.15s ease;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.optionButton:hover {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.optionButtonActive {
+  border-color: var(--color-border-strong);
+  background: var(--color-purple-soft);
+  color: var(--color-purple);
+  font-weight: 600;
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.6rem;
+}
+
+.fieldRow:last-child {
+  margin-bottom: 0;
+}
+
+.fieldLabel {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.fieldSelect {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.55rem;
+  background: var(--color-surface-2);
+  font-size: 0.78rem;
+  color: var(--color-text);
+}

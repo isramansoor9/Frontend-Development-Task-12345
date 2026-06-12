@@ -1,0 +1,52 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 14px 16px 12px 18px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    var(--color-purple-softer) 0%,
+    var(--color-surface-2) 55%,
+    var(--color-surface) 100%
+  );
+  box-shadow: var(--shadow-md);
+  transition: background-color 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  border-color: var(--color-purple);
+  box-shadow: var(--shadow-lg);
+}
+
+.text {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.modelBadge {
+  align-self: flex-end;
+  flex-shrink: 0;
+  margin-top: 4px;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text);
+  box-shadow: var(--shadow-sm);
+}
