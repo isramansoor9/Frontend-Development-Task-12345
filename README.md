@@ -1,4 +1,4 @@
-# Forge — AI Content Generation Studio
+# AI Content Generation Studio
 
 
 ## Features
